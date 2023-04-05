@@ -10,6 +10,7 @@ public class DbService {
     private static volatile DbService instance = null;
 
     // TODO Logger declaration
+    private ConsoleLogger logger = new ConsoleLogger();
     private List<Cat> cats = new ArrayList<>();
     private List<Dog> dogs = new ArrayList<>();
 
@@ -31,21 +32,42 @@ public class DbService {
     }
 
     public void addNewDog(Dog dog) {
-        dogs.add(dog);
-        // TODO logger.debug("BdService.Dog added");
+        try {
+            dogs.add(dog);
+            logger.debug("DbService. Dog added");
+        } catch (Exception e) {
+            logger.debug("DbService. Error adding dog: " + e.getMessage());
+        }
     }
     public void addNewCat(Cat cat) {
-        cats.add(cat);
-        // TODO logger.debug("BdService.Cat added");
+        
+        try {
+            cats.add(cat);
+            logger.debug("DbService. Cat added");
+        } catch (Exception e) {
+            logger.debug("DbService. Error adding cat: " + e.getMessage());
+        }
     }
 
     public List<Cat> getCats() {
         // TODO logger.debug("BdService.Get " + cats.size() + " cats);
-        return new ArrayList<>(cats);
+        
+        try {
+            return new ArrayList<>(cats);
+            logger.debug("BdService.Get " + cats.size() + " cats");
+        } catch (Exception e) {
+            logger.debug("DbService. Error: " + e.getMessage());
+        }
     }
 
     public List<Dog> getDogs() {
         // TODO logger.debug("BdService.Get " + cats.size() + " dogs);
-        return new ArrayList<>(dogs);
+        
+        try {
+            return new ArrayList<>(dogs);
+            logger.debug("BdService.Get " + dogs.size() + " dogs");
+        } catch (Exception e) {
+            logger.debug("DbService. Error: " + e.getMessage());
+        }
     }
 }
