@@ -18,6 +18,7 @@ public class ConsoleEditor implements Editor {
 
     private final CommandFactory commandFactory = new CommandFactory();
     private ArrayList<String> documentLines = new ArrayList<String>();
+    private Memento memento = new Memento();
 
     @Override
     public void run() {
@@ -25,6 +26,11 @@ public class ConsoleEditor implements Editor {
         while (!exit) {
             String commandLine = waitForNewCommand();
             try {
+                if (!commandLine.equals("undo")) {
+                    saveHistoryOperations();
+                } else {
+                    restoreLastOperation();
+                }
                 Command command = commandFactory.getCommand(commandLine);
                 command.execute(documentLines);
             } catch (BadCommandException e) {
@@ -64,6 +70,7 @@ public class ConsoleEditor implements Editor {
         printLnToConsole("To add new line -> a \"your text\"");
         printLnToConsole("To update line  -> u [line number] \"your text\"");
         printLnToConsole("To delete line  -> d [line number]");
+        printLnToConsole("To undo the last line written  -> undo");
     }
 
     private void printErrorToConsole(String message) {
@@ -82,6 +89,17 @@ public class ConsoleEditor implements Editor {
 
     private void printToConsole(String message) {
         System.out.print(message);
+    }
+
+    private void saveHistoryOperations(){
+        if (documentLines == null){
+            documentLines = new ArrayList<>();
+        }
+        this.memento.setEstado(new ArrayList<>(documentLines));
+    }
+
+    private void restoreLastOperation(){
+        this.documentLines = this.memento.getEstado();
     }
 
 }
